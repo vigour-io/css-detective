@@ -1,0 +1,40 @@
+{
+  "name": "css-detective",
+  "version": "1.0.0",
+  "description": "Find all `@import`s by walking the AST",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test node test/index.js | tap-difflet",
+    "cover": "istanbul cover --report none --print detail test/index.js",
+    "view-cover": "istanbul report html && open ./coverage/index.html",
+    "travis": "npm run cover -s && istanbul report lcov && ((cat coverage/lcov.info | coveralls) || exit 0)"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vigour-io/css-detective.git"
+  },
+  "keywords": [
+    "import",
+    "source",
+    "analyze",
+    "ast"
+  ],
+  "author": "Vigour.io <dev@vigour.io>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vigour-io/css-detective/issues"
+  },
+  "homepage": "https://github.com/vigour-io/css-detective#readme",
+  "contributors": [
+    "Shawn Inder <shawn@vigour.io>"
+  ],
+  "dependencies": {
+    "postcss": "^5.0.19"
+  },
+  "engines": {},
+  "devDependencies": {
+    "coveralls": "^2.11.9",
+    "istanbul": "^0.4.3",
+    "tape": "^4.5.1"
+  }
+}
