@@ -1,7 +1,3 @@
-# css-detective
-
-Find all `@import`s by walking the AST (similar to and inspired by [detective](https://github.com/substack/node-detective), but for CSS)
-
 <!-- VDOC.badges travis; standard; npm; coveralls -->
 <!-- DON'T EDIT THIS SECTION (including comments), INSTEAD RE-RUN `vdoc` TO UPDATE -->
 [![Build Status](https://travis-ci.org/vigour-io/css-detective.svg?branch=master)](https://travis-ci.org/vigour-io/css-detective)
@@ -11,71 +7,52 @@ Find all `@import`s by walking the AST (similar to and inspired by [detective](h
 
 <!-- VDOC END -->
 
-# example
+css-detective
+====
 
-## strings
+Find all `@import`s by walking the AST
 
-style.css:
+Similar to, and inspired by [detective](https://github.com/substack/node-detective). Uses [postcss](https://npmjs.org/package/postcss) to parse the CSS into an abstract syntax tree (AST), so some level of invalid CSS is supported.
 
-``` js
-@import 'a';
-@import 'b';
-@import 'c';
-```
+<!-- VDOC.jsdoc cssDetective -->
+<!-- DON'T EDIT THIS SECTION (including comments), INSTEAD RE-RUN `vdoc` TO UPDATE -->
+#### var strings = cssDetective(src, opts)
+- **src** (*string*) - Same as `src` parameter of [find](#var-found--findsrc-opts)
+- **opts** (*object*) - Same as `opts` parameter of [find](#var-found--findsrc-opts)
 
-strings.js:
+Same as `require('css-detective').find(src, opts).strings`
 
-``` js
-var cssDetective = require('css-detective')
-var fs = require('fs')
+See `find` below
 
-var src = fs.readFileSync(__dirname + '/style.css')
-var imports = cssDetective(src)
-console.dir(imports)
-```
-
-output:
-
-```
-$ node examples/strings.js
-[ 'a', 'b', 'c' ]
-```
-
-# methods
+<!-- VDOC END -->
 
 ``` js
 var cssDetective = require('css-detective')
+cssDetective('@import "a";\n@import "b";')
+// ['a', 'b']
 ```
 
-## cssDetective(src, opts)
+<!-- VDOC.jsdoc find -->
+<!-- DON'T EDIT THIS SECTION (including comments), INSTEAD RE-RUN `vdoc` TO UPDATE -->
+#### var found = find(src, [opts])
+- **src** (*string*) - Source css body (anything [postcss](https://npmjs.org/package/postcss) can parse). Can be a string or anything with a `toString` method
+- **[opts]** (*object*) - An object with any of the following options:
 
-Give some source body `src`, return an array of all the `@import`s.
+- + **opts.nodes** (*boolean*) - when `true`, populates `found.nodes`
 
-The options parameter `opts` is passed along to `cssDetective.find()`.
+- + **opts.parse** (*object*) - options to provide directly to
 
-## var found = cssDetective.find(src, opts)
+ [postcss's `parse` method](https://github.com/postcss/postcss/blob/master/docs/api.md#postcssparsecss-opts)
+- **returns** (*object*) found - returns `found` with:
 
-Give some source body `src`, return `found` with:
+- + **found.strings** (*array*) - each string found in an `@import`
 
-* `found.strings` - an array of each string found in an `@import`
-* `found.nodes` (when `opts.nodes === true`) - an array of AST nodes for each
-argument found in an `@import`
+- + **found.nodes** (*array*|*undefined*) - AST `@import` nodes found if `opts.nodes === true`, `undefined` otherwise
 
-Optionally:
+<!-- VDOC END -->
 
-* `opts.nodes` - when `true`, populate `found.nodes`
-* `opts.isImport(node)` - a function returning whether an AST node is an import
-* `opts.parse` - supply options directly to
-[postcss](https://npmjs.org/package/postcss)
-
-# install
-
-With [npm](https://npmjs.org) do:
-
+``` js
+var cssDetective = require('css-detective')
+cssDetective.find('@import "a";\n@import "b";')
+// { strings: ['a', 'b'] }
 ```
-npm install css-detective
-```
-
-# license
-
-ISC
